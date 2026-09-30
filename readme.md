@@ -185,55 +185,71 @@ Co je to tzv. **SoftPLC** a jak umožňuje průmyslovému PC (iPC) kombinovat v�
 
 ### 4. Návrh a konfigurace řídicí jednotky pro čerpací stanici
 
-*Časová dotace: 25–30 minut | :star: Klasifikovaná inženýrská úloha na známky*
+*Časová dotace: 25–30 minut | Klasifikovaná inženýrská úloha na známky*
 
-Jste v roli projektanta automatizace. Zákazník poptává zhotovení řízení pro obecní přečerpávací stanici odpadních vod.
+Projekt řízení obecní přečerpávací stanice odpadních vod ve venkovním prostředí (-20 °C až +45 °C).
 
-#### Zadání technologického procesu a periferií:
+---
+
+#### Zadání technologického procesu a periferií
+
 - **Snímače a vstupy:**
-  - 3× plovákový hladinový spínač (havarijní spodní hladina proti chodu nasucho, zapínací hladina, havarijní přepad) – bezpotenciálový kontakt spínající 24 V DC.
-  - 1× hydrostatická ponorná sonda výšky hladiny v jímce – výstupní signál 4–20 mA.
+  - 3× plovákový hladinový spínač (havarijní spodní hladina, zapínací hladina, havarijní přepad) – bezpotenciálový kontakt 24 V DC.
+  - 1× hydrostatická ponorná sonda výšky hladiny v jímce – analogový signál 4–20 mA.
   - 1× termistorové ochranné relé přehřátí motoru čerpadla – poruchový kontakt 24 V DC.
 - **Akční členy a výstupy:**
-  - 2× stykač pro spouštění motorů hlavního a záložního čerpadla – spínání cívky stykače 230 V AC / 0,5 A.
+  - 2× stykač pro spouštění motorů hlavního a záložního čerpadla – spínání cívky 230 V AC / 0,5 A.
   - 1× opticko-akustický výstražný maják – napájení 24 V DC / 0,3 A.
   - 1× řízení otáček frekvenčního měniče hlavního čerpadla – analogový signál 0–10 V.
 - **Komunikace a přenos dat:**
   - Odesílání údajů o hladině a poruchách na dispečink vodáren (Ethernet / Modbus TCP nebo GSM/LTE modul).
 - **Provozní podmínky:**
-  - Venkovní nekrytý terén, rozváděč vystavený dešti, prachu a teplotám v rozmezí **-20 °C až +45 °C**.
+  - Venkovní nekrytý terén, rozváděč vystaven dešti, prachu a teplotám **-20 °C až +45 °C**.
 
-#### Váš úkol:
+---
 
-1. **Sestavte tabulku I/O bilance** a spočtěte celkový počet signálů. Připočtěte rezervu min. 20 % pro budoucí rozšíření:
+#### 1. I/O bilance (+20 % rezerva)
 
-| Typ signálu | Požadavek aplikace (kusy) | Popis signálů v aplikaci | Počet po započtení rezervy (+20 %) |
+| Typ signálu | Požadavek (ks) | Popis v aplikaci | Počet s rezervou (+20 %) |
 | :--- | :--- | :--- | :--- |
-| **Digitální vstup (DI)** | **4** | 3× plovák (24 V DC), 1× porucha termistoru (24 V DC) | **5** *(4 × 1,2 = 4,8 -> zaokrouhleno nahoru)* |
-| **Digitální výstup (DO) – reléový** | **2** | 2× cívka stykače čerpadel (230 V AC) | **3** *(2 × 1,2 = 2,4 -> zaokrouhleno nahoru)* |
-| **Digitální výstup (DO) – tranzistorový** | **1** | 1× výstražný maják (24 V DC / 0,3 A) | **2** *(1 × 1,2 = 1,2 -> zaokrouhleno nahoru)* |
-| **Analogový vstup (AI)** | **1** | 1× hydrostatická sonda hladiny (4–20 mA) | **2** *(1 × 1,2 = 1,2 -> zaokrouhleno nahoru)* |
-| **Analogový výstup (AO)** | **1** | 1× frekvenční měnič řízení otáček (0–10 V) | **2** *(1 × 1,2 = 1,2 -> zaokrouhleno nahoru)* |
+| **DI** (Digitální vstup) | **4** | 3× plovák, 1× ochrana motoru (přehřátí) | **5** *(4 × 1,2 = 4,8 -> zaokrouhleno nahoru)* |
+| **DO** (Reléový výstup) | **2** | 2× cívka stykače čerpadel (230 V AC) | **3** *(2 × 1,2 = 2,4 -> zaokrouhleno nahoru)* |
+| **DO** (Tranzistorový výstup) | **1** | 1× výstražný maják (24 V DC) | **2** *(1 × 1,2 = 1,2 -> zaokrouhleno nahoru)* |
+| **AI** (Analogový vstup) | **1** | 1× ponorná sonda hladiny (4–20 mA) | **2** *(1 × 1,2 = 1,2 -> zaokrouhleno nahoru)* |
+| **AO** (Analogový výstup) | **1** | 1× řízení frekvenčního měniče (0–10 V) | **2** *(1 × 1,2 = 1,2 -> zaokrouhleno nahoru)* |
 
-2. **Výběr konkrétního hardwaru z katalogu výrobce:**
-   - Navrhněte konkrétní přístroj z praxe (např. *Siemens LOGO! 24RCE + rozšiřující moduly*, *Siemens S7-1200 CPU 1212C/1214C DC/DC/RLY*, *Schneider Modicon M221*, *Eaton easyE4-UC-12RC1*, *WAGO 750*, případně průmyslový IoT kontrolér typu *UniPi Neuron*).
-   - Uveďte:
-     - Výrobce a přesný model CPU: `Siemens SIMATIC S7-1200, CPU 1212C DC/DC/Relé`
-     - Objednací kód (Part Number / Order Code): `6ES7212-1HE40-0XB0`
-     - Rozšiřující moduly (pokud jsou nutné pro AI 4–20 mA nebo AO 0–10 V): `1× Signal Board SB 1232 AQ 1x13-bit (6ES7232-4HA30-0XB0) pro AO 0-10V; 1x Analogový rozšiřující modul SM 1231 AI 4x13-bit (6ES7231-4HD32-0XB0) konfigurabilní pro 4–20 mA; GSM/LTE modul CP 1243-7 LTE (6GK7243-7KX30-0XE0)`
-     - Napájecí napětí zvolené jednotky: `24 V DC (např. ze zdroje Siemens LOGO!Power 24V / 2,5A)`
-     - Jak je vyřešeno odesílání dat na dispečink: `Integrovaný PROFINET/Ethernet port (Modbus TCP) + komunikační LTE modul CP 1243-7 pro přenos dat na SCADA dispečink vodáren přes OpenVPN/MQTT a zasílání havarijních SMS.`
-     - Odkaz na technický list (datasheet): `https://support.industry.siemens.com/cs/document/109742283/`
-     - Odkazy na další použité zdroje: `https://mall.industry.siemens.com/`
+---
 
-3. **Technické ověření z datasheetu:**
-   - Zvládá zvolená jednotka garantovaný provoz při -20 °C? Doložte údaj z datasheetu: `Ano, řada Siemens S7-1200 (AG1200 / novější revize od V4.4) má dle datasheetu garantovaný rozsah provozních teplot -20 °C až +60 °C při horizontální montáži.`
-   - Jakým způsobem spínáte cívku stykače 230 V AC (reléový výstup jednotky přímo, nebo přes pomocné mezilehlé relé)? Zdůvodněte: `I když reléový výstup PLC spínání 230 V AC zvládne, v průmyslové praxi se striktně vkládá pomocné mezilehlé relé (např. Finder / Weidmüller na DIN lištu). Důvodem je ochrana drahého reléového výstupu PLC před opotřebením napěťovými špičkami z indukční zátěže cívky stykače a snadná, levná výměna mezilehlého relé při přivaření kontaktů.`
+#### 2. Výběr hardwaru
 
-4. **Krytí rozváděče:**
-   - Jaké minimální krytí **IP skříně** zvolíte? Jak v rozváděči zajistíte provoz v mrazech -20 °C a v letních vedrech?
-     - Zvolené krytí rozváděče: `Oceloplechový nebo polyesterový rozváděč s krytím IP65 s krycí stříškou proti dešti.`
-     - Teplotní management skříně: `Pro zimní provoz (-20 °C): Odporové rozváděčové topné těleso s termostatem (např. STEGO 50 W set na +5 °C) proti zamrznutí a kondenzaci vlhkosti. Pro letní provoz (+45 °C): Pasivní větrací mřížky s prachovým filtrem IP54 nebo protidešťový ventilátor se stíněním, případně dvojitá stěna rozváděče chránící před přímým slunečním svitem.`
+- **Řídicí jednotka (CPU):** Siemens SIMATIC S7-1200, CPU 1212C DC/DC/Relé
+- **Objednací kód (Part Number):** `6ES7212-1HE40-0XB0`
+- **Rozšiřující moduly:**
+  - `SB 1232 AQ 1x13-bit` (`6ES7232-4HA30-0XB0`) – deska pro analogový výstup 0–10 V (pro frekvenční měnič).
+  - `SM 1231 AI 4x13-bit` (`6ES7231-4HD32-0XB0`) – modul pro analogový vstup 4–20 mA (pro hydrostatickou sondu).
+  - `CP 1243-7 LTE` (`6GK7243-7KX30-0XE0`) – LTE modul pro SMS alarmy a přenos dat na dispečink.
+- **Napájení:** 24 V DC (např. spínaný zdroj Siemens LOGO!Power 24V / 2,5A).
+- **Odesílání dat na dispečink:** Integrovaný Ethernet port (Modbus TCP) + LTE modul pro přenos dat na SCADA dispečink a zasílání havarijních SMS.
+- **Odkaz na datasheet:** [Siemens Industry Online Support](https://support.industry.siemens.com/cs/document/109742283/)
+
+---
+
+#### 3. Technické ověření
+
+- **Provoz při -20 °C:**
+  - Novější revize Siemens S7-1200 (od firmware V4.4) mají v datasheetu garantovaný rozsah provozních teplot **-20 °C až +60 °C**.
+- **Spínání cívky stykače 230 V AC:**
+  - Cívka se spíná **přes pomocné mezipatrové relé** na DIN lištu (např. Finder). 
+  - **Zdůvodnění:** Cívka stykače je indukční zátěž, která při vypnutí vytváří napěťové špičky a opaluje kontakty. Pomocné relé stojí pár korun a dá se snadno vyměnit v patici, zatímco oprava vypáleného výstupu na PLC je drahá a složitá.
+
+---
+
+#### 4. Krytí a řešení rozváděče
+
+- **Krytí rozváděče:** **IP65** (prachotěsné a odolné proti tryskající dešťové vodě) s krycí stříškou proti dešti.
+- **Teplotní management:**
+  - **Zima (-20 °C):** Odporové topné těleso s termostatem (např. STEGO 50 W nastavené na +5 °C). Slouží proti mrazu a hlavně **zabraňuje kondenzaci vlhkosti** na elektronice.
+  - **Léto (+45 °C):** Stříška proti slunci, dvojitá stěna nebo větrací mřížky s filtrem IP54 (případně ventilátor s termostatem).
 
 > **Kritéria hodnocení úlohy 4 (bodování a známka):**
 > - :star: **Správnost I/O bilance a dimenzování (30 %):** Správný součet všech signálů, korektní rozlišení reléových vs. tranzistorových výstupů a správné započtení rezervy min. 20 %.
